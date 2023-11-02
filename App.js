@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-web';
 
 const NOMINATIM_BASE_URL = `https://nominatim.openstreetmap.org/search?`;
 
@@ -49,7 +48,7 @@ export default function App() {
   const Item = ({ osm_id, display_name, lat, lon }) => (
     <Pressable
       android_ripple={{
-          color: 'gray'
+        color: 'gray'
       }}
       onPress={() => console.log(lat, lon)}
       style={{
@@ -71,44 +70,46 @@ export default function App() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1, paddingTop: '50%' }}>
       <StatusBar style="auto" />
-      <Text style={{ marginBottom: 50 }}>Open up App.js to start working on your app!</Text>
 
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <TextInput
-          style={{
-            height: 40,
-            padding: 10,
-            borderColor: 'gray',
-            borderWidth: 1,
-            borderRadius: 5,
-          }}
-          onChangeText={text => {
-            setSearchString(text);
-            // handleLocationSearch();
-          }}
-          onSubmitEditing={handleLocationSearch}
-          value={searchString}
-          placeholder="Enter your location manually"
-          placeholderTextColor={'gray'}
-        />
+      <View style={styles.container}>
 
-        <Ionicons
-          name="ios-search-circle"
-          size={35}
-          style={{ backgroundColor: 'black', marginLeft: 5, borderRadius: 5 }}
-          color="white"
-          onPress={handleLocationSearch}
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TextInput
+            style={{
+              height: 40,
+              padding: 10,
+              borderColor: 'gray',
+              borderWidth: 1,
+              borderRadius: 5,
+            }}
+            onChangeText={text => {
+              setSearchString(text);
+              // handleLocationSearch();
+            }}
+            onSubmitEditing={handleLocationSearch}
+            value={searchString}
+            placeholder="Enter your location manually"
+            placeholderTextColor={'gray'}
+          />
+
+          <Ionicons
+            name="ios-search-circle"
+            size={35}
+            style={{ backgroundColor: 'black', marginLeft: 5, borderRadius: 5 }}
+            color="white"
+            onPress={handleLocationSearch}
+          />
+        </View>
+
+        <FlatList
+          data={locationInfo}
+          renderItem={renderItem}
+          keyExtractor={item => item.osm_id}
         />
       </View>
-
-      <FlatList
-        data={locationInfo}
-        renderItem={renderItem}
-        keyExtractor={item => item.osm_id}
-      />
-    </View>
+    </SafeAreaView>
   );
 }
 
